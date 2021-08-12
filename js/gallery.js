@@ -13,7 +13,7 @@ gallery.addEventListener('click', onGalleryClick);
 function makeGalleryItemsMarkup(items) {
   return items
     .map(
-      ({ preview, original, description }) => `
+      ({ preview, original, description }, index) => `
     <li class="gallery__item">
       <a
         class="gallery__link"
@@ -24,6 +24,7 @@ function makeGalleryItemsMarkup(items) {
           src="${preview}"
           data-source="${original}"
           alt="${description}"
+          data-index="${index}"
         />
       </a>
     </li>
@@ -37,20 +38,27 @@ function onGalleryClick(e) {
 
   e.preventDefault();
 
-  setLightboxImageSrc(e.target.dataset?.source, e.target.alt);
+  const galleryImage = e.target;
+
+  setLightboxImageSrc(
+    galleryImage.dataset?.source,
+    galleryImage.alt,
+    galleryImage.dataset?.index,
+  );
   toggleLightboxVisibility();
   addEventListeners();
 }
 
 function closeLightbox() {
   toggleLightboxVisibility();
-  setLightboxImageSrc('', '');
+  setLightboxImageSrc('', '', '');
   removeEventListeners();
 }
 
-function setLightboxImageSrc(src, alt) {
+function setLightboxImageSrc(src, alt, idx) {
   lightboxImage.src = src;
   lightboxImage.alt = alt;
+  lightboxImage.dataset?.index = idx;
 }
 
 function toggleLightboxVisibility() {
@@ -95,31 +103,25 @@ function onKeydown(e) {
 }
 
 function setNextImage() {
-  let nextImageIdx = getCurrentLightboxImageIdx() + 1;
-
-  if (nextImageIdx >= gallery.childElementCount) {
-    nextImageIdx = 0;
-  }
+  const currentImageIdx = Number(lightboxImage.dataset?.index);
+  const nextImageIdx =
+    currentImageIdx + 1 < gallery.childElementCount ? currentImageIdx + 1 : 0;
 
   setLightboxImageSrc(
     galleryItems[nextImageIdx].original,
     galleryItems[nextImageIdx].description,
+    nextImageIdx,
   );
 }
 
 function setPrevImage() {
-  let prevImageIdx = getCurrentLightboxImageIdx() - 1;
-
-  if (prevImageIdx < 0) {
-    prevImageIdx = gallery.childElementCount - 1;
-  }
+  const currentImageIdx = Number(lightboxImage.dataset?.index);
+  const prevImageIdx =
+    currentImageIdx - 1 >= 0 ? currentImageIdx - 1 : gallery.childElementCount - 1;
 
   setLightboxImageSrc(
     galleryItems[prevImageIdx].original,
     galleryItems[prevImageIdx].description,
+    prevImageIdx,
   );
-}
-
-function getCurrentLightboxImageIdx() {
-  return galleryItems.findIndex(item => item.original === lightboxImage.src);
 }
