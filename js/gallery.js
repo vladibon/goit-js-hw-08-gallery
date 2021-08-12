@@ -58,7 +58,7 @@ function closeLightbox() {
 function setLightboxImageSrc(src, alt, idx) {
   lightboxImage.src = src;
   lightboxImage.alt = alt;
-  lightboxImage.dataset?.index = idx;
+  lightboxImage.dataset.index = idx;
 }
 
 function toggleLightboxVisibility() {
