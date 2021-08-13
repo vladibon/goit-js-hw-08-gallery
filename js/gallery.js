@@ -6,7 +6,7 @@ const lightboxImage = document.querySelector('.lightbox__image');
 const lightboxOverlay = document.querySelector('.lightbox__overlay');
 const lightboxCloseBtn = document.querySelector('[data-action="close-lightbox"]');
 
-gallery.insertAdjacentHTML('beforeend', makeGalleryItemsMarkup(galleryItems));
+gallery.innerHTML = makeGalleryItemsMarkup(galleryItems);
 
 gallery.addEventListener('click', onGalleryClick);
 
@@ -21,6 +21,7 @@ function makeGalleryItemsMarkup(items) {
       >
         <img
           class="gallery__image"
+          loading="lazy"
           src="${preview}"
           data-source="${original}"
           alt="${description}"
