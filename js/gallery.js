@@ -8,13 +8,13 @@ const lightboxCloseBtn = document.querySelector('[data-action="close-lightbox"]'
 
 const hasLazyLoading = 'loading' in HTMLImageElement.prototype;
 
-if (!hasLazyLoading) addLazysizesScript();
+if (!hasLazyLoading) addLazySizesScript();
 
 gallery.innerHTML = makeGalleryItemsMarkup(galleryItems);
 
 gallery.addEventListener('click', onGalleryClick);
 
-function addLazysizesScript() {
+function addLazySizesScript() {
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js';
 
