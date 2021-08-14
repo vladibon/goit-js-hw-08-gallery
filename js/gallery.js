@@ -6,9 +6,20 @@ const lightboxImage = document.querySelector('.lightbox__image');
 const lightboxOverlay = document.querySelector('.lightbox__overlay');
 const lightboxCloseBtn = document.querySelector('[data-action="close-lightbox"]');
 
+const hasLazyLoading = 'loading' in HTMLImageElement.prototype;
+
+if (!hasLazyLoading) addLazysizesScript();
+
 gallery.innerHTML = makeGalleryItemsMarkup(galleryItems);
 
 gallery.addEventListener('click', onGalleryClick);
+
+function addLazysizesScript() {
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js';
+
+  document.body.appendChild(script);
+}
 
 function makeGalleryItemsMarkup(items) {
   return items
@@ -20,9 +31,10 @@ function makeGalleryItemsMarkup(items) {
         href="${original}"
       >
         <img
-          class="gallery__image"
+          class="gallery__image lazyload"
           loading="lazy"
-          src="${preview}"
+          ${hasLazyLoading ? `src="${preview}"` : ''}
+          ${!hasLazyLoading ? `data-src="${preview}"` : ''}
           data-source="${original}"
           alt="${description}"
           data-index="${index}"
